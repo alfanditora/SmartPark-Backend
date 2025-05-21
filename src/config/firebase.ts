@@ -1,23 +1,18 @@
 import * as admin from 'firebase-admin';
 import dotenv from 'dotenv';
-import path from 'path';
 
 dotenv.config();
 
 let serviceAccount: any;
 
 try {
-  if (process.env.FIREBASE_SERVICE_ACCOUNT_PATH) {
-    const serviceAccountPath = path.resolve(
-      process.cwd(),
-      process.env.FIREBASE_SERVICE_ACCOUNT_PATH
-    );
-    serviceAccount = require(serviceAccountPath);
+  if (process.env.FIREBASE_SERVICE_ACCOUNT) {
+    serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
   } else {
-    throw new Error('FIREBASE_SERVICE_ACCOUNT_PATH is not defined in .env');
+    throw new Error('FIREBASE_SERVICE_ACCOUNT is not defined in .env');
   }
 } catch (e) {
-  console.error('Error parsing Firebase service account:', e);
+  console.error('Error parsing Firebase service account JSON from environment variable:', e);
   process.exit(1);
 }
 
